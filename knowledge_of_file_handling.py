@@ -6,9 +6,12 @@ def getChoice():
     print("1. Create a new File\n 2. Open existing file\n "
           "3. Read file contents\n 4. Write to new file\n "
           "5. Search data in file\n 6. Append to existing file and Read incremental data\n 7.  Exit")
-
-    choice = int(input(" enter Your choice"))
-    return choice
+    try:
+        choice = int(input(" enter Your choice"))
+    except ValueError:
+        print("Choice needs to be integer")
+    else:
+        return choice
 
 
 if __name__ == '__main__':
@@ -17,22 +20,39 @@ if __name__ == '__main__':
     while choice != 7:
          if choice == 1:
              file_name = str(input("Enter file name to create(eg. abc.txt):  "))
-             with open(file_name, 'w+') as fp:
+             try:
+                 fp = open(file_name, 'x')
+             except FileExistsError as e:
+                 print(e)
+             else:
                  print("file created")
+                 fp.close()
+
          elif choice == 2:
             file_name = str(input("Enter file name(eg. abc.txt):  "))
-            with open(file_name,'r') as fp:
+            try:
+                fp = open(file_name,'r')
+            except FileNotFoundError as e:
+                print(e)
+            else:
                 print("file opened")
-                #for each in fp:
+                # for each in fp:
                 print(fp.tell())
+                fp.close()
+
          elif choice == 3:
              file_name = str(input("Enter file name(eg. abc.txt):  "))
-             with open(file_name, 'r') as fp:
+             try:
+                 fp = open(file_name, 'r')
+             except FileNotFoundError as e:
+                 print(e)
+             else:
                  print(fp.read())
+                 fp.close()
 
          elif choice == 4:
              file_name = str(input("Enter file name to write into(eg. abc.txt):  "))
-             content= input("enter content(max 100 character) ")
+             content= input("enter content(max 100 character) and press enter once done.")
              if len(content)>100:
                   raise Exception("limit exceeded")
              else:
